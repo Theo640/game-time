@@ -11,7 +11,8 @@ SKY_BLUE = (95, 165, 228)
 WIDTH = 800
 HEIGHT = 600
 TITLE = "Final game"
-NUM_RECT = 3
+NUM_RECT = 4
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -21,9 +22,12 @@ class Player(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
+        self.image = pygame.transform.scale(self.image, (32,44))
+
     def update(self):
         """Move the player with the mouse"""
         self.rect.center = pygame.mouse.get_pos()
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -31,7 +35,9 @@ class Enemy(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("./images/wall.png")
 
+        self.image = pygame.transform.scale(self.image, (155, 41))
         self.rect = self.image.get_rect()
+
 
         self.x_vel = 3
 
@@ -42,6 +48,15 @@ class Enemy(pygame.sprite.Sprite):
         # keep enemy in the screen
         if self.rect.right > WIDTH or self.rect.left < 0:
             self.x_vel *= -1
+
+class Jewel(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+
+        self.image = pygame.Surface((35,20))
+        self.image.fill((100, 255, 100))
+
+        self.rect = self.image.get_rect()
 
 
 def main():
@@ -58,10 +73,15 @@ def main():
 
     # Sprite groups
     all_sprites = pygame.sprite.RenderUpdates()
+    enemy_group = pygame.sprite.Group()
 
-    # --- enemy
-    enemy = Enemy()
-    all_sprites.add(enemy)
+    # enemy creation
+    for i in range(NUM_RECT):
+        enemy = Enemy()
+        enemy.rect.x = random.randrange(WIDTH - enemy.rect.width)
+        enemy.rect.y = random.randrange(HEIGHT - enemy.rect.height)
+        all_sprites.add(enemy)
+        enemy_group.add(enemy)
 
     # --- player
     player = Player()
@@ -75,11 +95,14 @@ def main():
                 done = True
 
         # ----- LOGIC
+        all_sprites.update()
+
+        # player collides with enemy
+        enemy_hit = pygame.sprite.spritecollide(player, enemy_group, True)
 
         # ----- DRAW
         screen.fill(BLACK)
         all_sprites.draw(screen)
-
 
         # ----- UPDATE
         pygame.display.flip()
