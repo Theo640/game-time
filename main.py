@@ -11,8 +11,8 @@ SKY_BLUE = (95, 165, 228)
 WIDTH = 800
 HEIGHT = 600
 TITLE = "Final game"
-NUM_RECT = 6
-NUM_JEWS = 23
+NUM_RECT = 8
+NUM_JEWS = 10
 
 
 class Player(pygame.sprite.Sprite):
@@ -21,10 +21,9 @@ class Player(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("./images/link.png")
 
-        self.image = pygame.transform.scale(self.image, (32,44))
+        self.image = pygame.transform.scale(self.image, (32, 44))
 
         self.rect = self.image.get_rect()
-
 
     def update(self):
         """Move the player with the mouse"""
@@ -38,8 +37,8 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.image.load("./images/wall.png")
 
         self.image = pygame.transform.scale(self.image, (155, 41))
-        self.rect = self.image.get_rect()
 
+        self.rect = self.image.get_rect()
 
         self.x_vel = 3
 
@@ -51,12 +50,15 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.right > WIDTH or self.rect.left < 0:
             self.x_vel *= -1
 
+
 class Jewel(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.image = pygame.Surface((35,20))
-        self.image.fill((100, 255, 100))
+        self.image = pygame.image.load("./images/jewel.png")
+
+        self.image = pygame.transform.scale(self.image, (32, 32))
+        self.image.set_colorkey(WHITE)
 
         self.rect = self.image.get_rect()
 
@@ -95,7 +97,6 @@ def main():
         jewel = Jewel()
         jewel.rect.x = random.randrange(WIDTH - jewel.rect.width)
         jewel.rect.y = random.randrange(HEIGHT - jewel.rect.height)
-        all_sprites.add(jewel)
         jewel_group.add(jewel)
 
     # ----- MAIN LOOP
@@ -118,6 +119,7 @@ def main():
 
         # ----- DRAW
         screen.fill(BLACK)
+        jewel_group.draw(screen)
         all_sprites.draw(screen)
 
         # ----- UPDATE
