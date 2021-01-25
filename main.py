@@ -11,7 +11,8 @@ SKY_BLUE = (95, 165, 228)
 WIDTH = 800
 HEIGHT = 600
 TITLE = "Final game"
-NUM_RECT = 4
+NUM_RECT = 6
+NUM_JEWS = 23
 
 
 class Player(pygame.sprite.Sprite):
@@ -90,9 +91,12 @@ def main():
     all_sprites.add(player)
 
     # --- jewel
-    jewel = Jewel()
-    all_sprites.add(jewel)
-    jewel_group.add(jewel)
+    for i in range(NUM_JEWS):
+        jewel = Jewel()
+        jewel.rect.x = random.randrange(WIDTH - jewel.rect.width)
+        jewel.rect.y = random.randrange(HEIGHT - jewel.rect.height)
+        all_sprites.add(jewel)
+        jewel_group.add(jewel)
 
     # ----- MAIN LOOP
     while not done:
