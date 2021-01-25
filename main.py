@@ -20,9 +20,10 @@ class Player(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("./images/link.png")
 
+        self.image = pygame.transform.scale(self.image, (32,44))
+
         self.rect = self.image.get_rect()
 
-        self.image = pygame.transform.scale(self.image, (32,44))
 
     def update(self):
         """Move the player with the mouse"""
@@ -74,6 +75,7 @@ def main():
     # Sprite groups
     all_sprites = pygame.sprite.RenderUpdates()
     enemy_group = pygame.sprite.Group()
+    jewel_group = pygame.sprite.Group()
 
     # enemy creation
     for i in range(NUM_RECT):
@@ -87,6 +89,11 @@ def main():
     player = Player()
     all_sprites.add(player)
 
+    # --- jewel
+    jewel = Jewel()
+    all_sprites.add(jewel)
+    jewel_group.add(jewel)
+
     # ----- MAIN LOOP
     while not done:
         # -- Event Handler
@@ -98,7 +105,12 @@ def main():
         all_sprites.update()
 
         # player collides with enemy
-        enemy_hit = pygame.sprite.spritecollide(player, enemy_group, True)
+        enemy_hit = pygame.sprite.spritecollide(player, enemy_group, False)
+        if len(enemy_hit) > 0:
+            player.kill()
+
+        # player collide with jewel
+        jewel_collected = pygame.sprite.spritecollide(player, jewel_group, True)
 
         # ----- DRAW
         screen.fill(BLACK)
