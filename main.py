@@ -15,6 +15,7 @@ NUM_RECT = 8
 NUM_JEWS = 10
 
 
+# Player class
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -30,6 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = pygame.mouse.get_pos()
 
 
+# Enemy class
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -43,7 +45,7 @@ class Enemy(pygame.sprite.Sprite):
         self.x_vel = 3
 
     def update(self):
-        """Move rectangle side to side"""
+        """Move enemies side to side"""
         self.rect.x += self.x_vel
 
         # keep enemy in the screen
@@ -51,6 +53,7 @@ class Enemy(pygame.sprite.Sprite):
             self.x_vel *= -1
 
 
+# Jewel class
 class Jewel(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -80,7 +83,7 @@ def main():
     enemy_group = pygame.sprite.Group()
     jewel_group = pygame.sprite.Group()
 
-    # enemy creation
+    # --- enemy creation
     for i in range(NUM_RECT):
         enemy = Enemy()
         enemy.rect.x = random.randrange(WIDTH - enemy.rect.width)
